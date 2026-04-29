@@ -2,7 +2,6 @@ from validate import *
 
 class Weapon:
     def __init__(self, damage, rare, hardness, effects, tip, imia, kolichestvo):
-        # Используем защищенные атрибуты для хранения значений
         self._imia = validate_imia(imia) 
         self._damage = validate_damage(damage)
         self._tip = validate_tip(tip)
