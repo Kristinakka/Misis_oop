@@ -20,7 +20,7 @@ def validate_blade_length(blade_length):
     raise ValueError("Длина клинка должна быть числом")
 
 def validate_material(material):
-    valid_materials = ["сталь", "булат", "дамасская сталь", "титан", "мифрил", "адамантий"]
+    valid_materials = ["сталь", "титан", "булат", "давлат", "хз", "кдчд"]
     if material in valid_materials:
         return material
     raise ValueError(f"Материал должен быть одним из: {valid_materials}")
