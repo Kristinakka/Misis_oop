@@ -1,4 +1,4 @@
-from models import Weapon
+from model import Weapon
 
 class Firearms(Weapon):
     def __init__(self, damage, rare, hardness, effects, tip, imia, kolichestvo,

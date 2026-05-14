@@ -1,8 +1,7 @@
 from validate import * 
 
 class Weapon:
-    def __init__(self, damage: int, rare: str, hardness: int, effects: str, tip: str, imia: str, kolichestvo: int) -> None:
-        # Используем защищенные атрибуты для хранения значений
+    def __init__(self, damage, rare, hardness, effects, tip, imia, kolichestvo):
         self._imia = validate_imia(imia) 
         self._damage = validate_damage(damage)
         self._tip = validate_tip(tip)
@@ -63,10 +62,3 @@ class Weapon:
             return "Ваше оружие имеет максимальную прочность!"
         
 
-        #новинки в мясном отделе светофора
-
-    def display(self) -> str:       #Реализует протокол Displayable.
-        return f"{self._imia}, Тип: {self._tip}, Урон: {self._damage}, Прочность: {self._hardness}"
-    
-    def score(self) -> float:       #Реализует протокол Scorable.
-        return (self._damage * 0.7 + (self._hardness / 100) * 5 * 0.3)

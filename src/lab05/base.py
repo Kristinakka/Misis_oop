@@ -54,14 +54,3 @@ class Edged(Weapon):
 
     def display_info(self):
         return f"{self._imia}, {self._material}, {self._blade_length}см, Урон: {self._damage}"
-    
-
-    
-    def display(self) -> str:       #Переопределяет метод родителя для огнестрельного оружия
-        return f"{self._imia}, Калибр: {self._caliber}мм, Магазин: {self._magazine_capacity}, Урон: {self._damage}"
-
-    def score(self) -> float:       #Переопределяет метод родителя с учетом специфики огнестрельного оружия
-        base_score: float = super().score()
-        caliber_bonus: float = (self._caliber / 20) * 10
-        mag_bonus: float = (self._magazine_capacity / 100) * 10
-        return min(base_score + caliber_bonus + mag_bonus, 100.0)

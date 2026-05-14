@@ -62,7 +62,7 @@ class Weapon:
 class Firearms(Weapon, Printable, Repairable, Comparable):
     def __init__(self, damage, rare, hardness, effects, tip, imia, kolichestvo,
                  caliber, magazine_capacity):
-        super().__init__(damage, rare, hardness, effects, tip, imia, kolichestvo)
+        super().__init__(damage=damage, rare=rare, hardness=hardness, effects=effects, tip=tip, imia=imia, kolichestvo=kolichestvo)
         self._caliber = caliber         
         self._magazine_capacity = magazine_capacity  
 
@@ -95,7 +95,7 @@ class Firearms(Weapon, Printable, Repairable, Comparable):
     # Реализация Comparable
     def compare_to(self, other) -> int:
         if not isinstance(other, Weapon):
-            raise TypeError("Можно сравнивать только оружие")
+            raise TypeError("Можно сравнивать только огнестрельное оружие")
         if self._damage < other._damage:
             return -1
         elif self._damage == other._damage:
@@ -140,7 +140,7 @@ class Edged(Weapon, Printable, Repairable, Comparable):
     # Реализация Comparable
     def compare_to(self, other) -> int:
         if not isinstance(other, Weapon):
-            raise TypeError("Можно сравнивать только оружие")
+            raise TypeError("Можно сравнивать только холодное оружие")
         if self._damage < other._damage:
             return -1
         elif self._damage == other._damage:
