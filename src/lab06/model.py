@@ -1,4 +1,4 @@
-from validate import * 
+from validate_model import * 
 
 class Weapon:
     def __init__(self, damage: int, rare: str, hardness: int, effects: str, tip: str, imia: str, kolichestvo: int) -> None:

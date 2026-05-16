@@ -67,7 +67,6 @@ class TypedCollection(Generic[T]):      #Обобщённая типизиров
         for item in self._items:
             if predicate(item):
                 return item
-        return None
     
     def filter(self, predicate: Callable[[T], bool]) -> List[T]:
         """Возвращает список всех элементов, удовлетворяющих условию."""
