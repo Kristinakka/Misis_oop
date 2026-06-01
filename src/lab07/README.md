@@ -322,6 +322,9 @@ python -m pytest test_refactoring.py -v
 
 ---
 
+# 7.1 Asciinema:
+[![asciinema](https://asciinema.org/a/uRk1vfQuPphlyZ1X.svg)](https://asciinema.org/a/uRk1vfQuPphlyZ1X)
+
 ## 8. Вывод
 
 В ходе выполнения лабораторной работы были изучены и применены:
