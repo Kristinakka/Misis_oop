@@ -1,53 +1,47 @@
 from base import Firearms, Edged
-# стратегии сортировки
 
-def by_name(weapon): # стратегия соортировки по имени 
+
+# --- Стратегии сортировки ---
+
+def by_name(weapon):
     return weapon._imia
 
-def by_damage(weapon): #стратегия сортировки по урону
+def by_damage(weapon):
     return weapon._damage
 
-def by_rarity(weapon): # cтратегия сортировки по редкости (легендарное > редкое > обычное)
-    rarity_order = {'легендарное': 3, 'редкое': 2, 'обычное': 1}
+def by_rarity(weapon):
+    rarity_order = {'Легендарное': 6, 'Мифическое': 5, 'Эпическое': 4,
+                    'Сверхредкое': 3, 'Редкое': 2, 'Обычное': 1}
     return rarity_order.get(weapon._rare, 0)
 
-def by_damage_then_name(weapon): # cтратегия сортировки сначала по урону, затем по имени
+def by_damage_then_name(weapon):
     return (weapon._damage, weapon._imia)
 
-def by_price(weapon): # cтратегия сортировки по цене
+def by_price(weapon):
     return weapon.calculate_price()
 
 
-# функции-фильтры
+# --- Функции-фильтры ---
 
-def is_legendary(weapon): # только легенда
-    return weapon._rare == 'легендарное'
+def is_legendary(weapon):
+    return weapon._rare == 'Легендарное'
 
-def is_high_damage(weapon, min_damage=100): # оружие только с уроном выше порога
+def is_high_damage(weapon, min_damage=100):
     return weapon._damage >= min_damage
 
-def is_repairable(weapon): # оружие, которое надо починить 
+def is_repairable(weapon):
     return weapon._hardness < 100
 
-def is_firearms(weapon): # только огнестрельное
-    return isinstance(weapon, Firearms)  
+def is_firearms(weapon):
+    return isinstance(weapon, Firearms)
 
-def is_edged(weapon): # только холодное оружие
+def is_edged(weapon):
     return isinstance(weapon, Edged)
 
 
-# смотря какой fabric функции
+# --- Фабрики фильтров ---
 
 def make_damage_filter(min_damage, max_damage=None):
-    """
-    Фабрика функций: создаёт фильтр по диапазону урона
-    
-    Параметры:
-        min_damage: минимальный урон
-        max_damage: максимальный урон (опционально)
-    
-    Возвращает функцию-фильтр
-    """
     def filter_fn(weapon):
         if max_damage is None:
             return weapon._damage >= min_damage
@@ -55,39 +49,22 @@ def make_damage_filter(min_damage, max_damage=None):
     return filter_fn
 
 def make_rarity_filter(rare_level):
-    """
-    Фабрика функций: создаёт фильтр по редкости
-    
-    Параметры:
-        rare_level: строка с редкостью ('легендарное', 'редкое', 'обычное')
-    
-    Возвращает функцию-фильтр
-    """
     def filter_fn(weapon):
         return weapon._rare == rare_level
     return filter_fn
 
 def make_price_multiplier(multiplier):
-    """
-    Фабрика функций: создаёт функцию для изменения цены
-    
-    Параметры:
-        multiplier: множитель цены
-    
-    Возвращает функцию преобразования
-    """
     def apply_multiplier(weapon):
-        original_price = weapon.calculate_price()
-        return original_price * multiplier
+        return weapon.calculate_price() * multiplier
     return apply_multiplier
 
 
-# функции для Map
+# --- Функции для map ---
 
-def to_string(weapon): # оружие в строку делат
+def to_string(weapon):
     return str(weapon)
 
-def to_info_dict(weapon): # оружие в словар делат
+def to_info_dict(weapon):
     return {
         'name': weapon._imia,
         'damage': weapon._damage,
@@ -96,14 +73,6 @@ def to_info_dict(weapon): # оружие в словар делат
     }
 
 def apply_discount(percent):
-    """
-    Фабрика функций: создаёт функцию для применения скидки
-    
-    Параметры:
-        percent: процент скидки (0-100)
-    
-    Возвращает функцию, которая изменяет цену оружия
-    """
     def discount_fn(weapon):
         original_price = weapon.calculate_price()
         discounted_price = original_price * (1 - percent / 100)
@@ -111,34 +80,32 @@ def apply_discount(percent):
     return discount_fn
 
 
-# паттерн «Стратегия» через callable-объекты
+# --- Паттерн «Стратегия» через callable-объекты ---
 
-class DamageUpgradeStrategy: # стратегия улучшения урона оружия
+class DamageUpgradeStrategy:
     def __init__(self, bonus_damage):
         self.bonus_damage = bonus_damage
-    
-    def __call__(self, weapon): # применяем стратегия к улучшению оружия  
+
+    def __call__(self, weapon):
         old_damage = weapon._damage
         weapon._damage += self.bonus_damage
-        return f" {weapon._imia}: урон повышен с {old_damage} до матадора {weapon._damage}"
+        return f"{weapon._imia}: урон повышен с {old_damage} до {weapon._damage}"
 
 
-class RarityUpgradeStrategy: # улучшение редкости оружия 
-    rarity_order = ['обычное', 'редкое', 'легендарное']
-    
+class RarityUpgradeStrategy:
+    rarity_order = ['Обычное', 'Редкое', 'Сверхредкое', 'Эпическое', 'Мифическое', 'Легендарное']
+
     def __call__(self, weapon):
         old_rarity = weapon._rare
-        if old_rarity == 'обычное':
-            weapon._rare = 'редкое'
-        elif old_rarity == 'редкое':
-            weapon._rare = 'легендарное'
-        else:
-            return f"{weapon._imia} уже имеет максимальную редкость!"
-        
-        return f"{weapon._imia}: редкость повышена с {old_rarity} до {weapon._rare}"
+        if old_rarity in self.rarity_order:
+            idx = self.rarity_order.index(old_rarity)
+            if idx < len(self.rarity_order) - 1:
+                weapon._rare = self.rarity_order[idx + 1]
+                return f"{weapon._imia}: редкость повышена с {old_rarity} до {weapon._rare}"
+        return f"{weapon._imia} уже имеет максимальную редкость!"
 
 
-class RepairStrategy: # ремонт оружия
+class RepairStrategy:
     def __call__(self, weapon):
         if weapon._hardness < 100:
             weapon._hardness = 100

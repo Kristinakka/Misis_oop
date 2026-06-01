@@ -8,7 +8,7 @@ print("ТЕСТ 1: Создание объектов")
 try:
     weapon1 = Weapon(
         damage=50, 
-        rare="Легендарное",  
+        rare='Легендарное',  
         hardness=100, 
         effects="огонь, лед", 
         tip="Меч",  
